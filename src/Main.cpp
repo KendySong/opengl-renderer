@@ -31,7 +31,7 @@ int main()
 
 #if DEBUG
 	Shader shader("../shaders/vertex.glsl", "../shaders/fragment.glsl");
-	glUseProgram(shader.getProgram());
+	shader.bind();
 #else
 	Shader shader("vertex.glsl", "fragment.glsl");
 	shader.bind();
