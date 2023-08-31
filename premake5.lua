@@ -1,9 +1,9 @@
-workspace "triangle"
+workspace "opengl-renderer"
     architecture "x64"
     location "build"
     configurations { "Release", "Debug" }
 
-project "triangle"
+project "opengl-renderer"
     kind "ConsoleApp"
     language "C++"
     location "build"

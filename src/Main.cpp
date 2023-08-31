@@ -19,7 +19,7 @@ const std::uint32_t height = 720;
 int main()
 {
 	glfwInit();
-	GLFWwindow* window = glfwCreateWindow(width, height, "Triangle", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL Renderer", NULL, NULL);
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -31,7 +31,7 @@ int main()
 
 #if DEBUG
 	Shader shader("../shaders/vertex.glsl", "../shaders/fragment.glsl");
-	shader.bind();
+	glUseProgram(shader.getProgram());
 #else
 	Shader shader("vertex.glsl", "fragment.glsl");
 	shader.bind();
