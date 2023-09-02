@@ -13,6 +13,7 @@ Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(sha
 			1, 2, 3
 	};
 
+	this->color = glm::vec3(1);
 	switch (type)
 	{
 	case MeshType::Triangle :
@@ -64,12 +65,16 @@ Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(sha
 
 void Mesh::draw()
 {
-	glm::mat4x4 world;
-
-	//Apply transformation
+	glm::mat4x4 world(1);
+	world = glm::translate(world, this->transform.position);
+	world = glm::rotate(world, this->transform.rotation.x, glm::vec3(1, 0, 0));
+	world = glm::rotate(world, this->transform.rotation.y, glm::vec3(0, 1, 0));
+	world = glm::rotate(world, this->transform.rotation.z, glm::vec3(0, 0, 1));
+	world = glm::scale(world, this->transform.scale);
 
 	this->shader->bind();
 	this->shader->uniformMat4("u_world", world);
+	this->shader->uniformVec3("u_color", this->color);
 	glBindVertexArray(m_vao);
 	switch (m_type)
 	{

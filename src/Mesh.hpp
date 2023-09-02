@@ -15,6 +15,7 @@ public :
 	Mesh(MeshType type, float size, Shader* shader);
 	void draw();
 
+	glm::vec3 color;
 	Transform transform;
 	Shader* shader;
 

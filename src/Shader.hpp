@@ -19,8 +19,8 @@ private:
 	const char* readContent(const char* path);
 
 public :
-	void uniformMat4(const char* name, glm::mat4x4 m);
-
+	void uniformMat4(const char* name, glm::mat4x4& m);
+	void uniformVec3(const char* name, glm::vec3& v);
 
 private :
 	std::uint32_t m_id;
