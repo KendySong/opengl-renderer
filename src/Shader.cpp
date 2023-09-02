@@ -18,23 +18,25 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	this->compile(vertexID, "vertex");
 	this->compile(fragmentID, "fragment");
 
-	std::uint32_t program = glCreateProgram();
-	glAttachShader(program, vertexID);
-	glAttachShader(program, fragmentID);
-	glLinkProgram(program);
+	m_id = glCreateProgram();
+	glAttachShader(m_id, vertexID);
+	glAttachShader(m_id, fragmentID);
+	glLinkProgram(m_id);
 
 	int linkStatus = 0;
-	glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+	glGetProgramiv(m_id, GL_LINK_STATUS, &linkStatus);
 	if (!linkStatus)
 	{
 		int length = 0;
-		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
+		glGetProgramiv(m_id, GL_INFO_LOG_LENGTH, &length);
 
 		std::vector<char> linkStatusMessage(length);
-		glGetProgramInfoLog(program, length, nullptr, linkStatusMessage.data());
+		glGetProgramInfoLog(m_id, length, nullptr, linkStatusMessage.data());
 		std::cout << "[ERROR] shader linking failed " << linkStatusMessage.data() << '\n';
 	}
 
+	glDetachShader(m_id, vertexID);
+	glDetachShader(m_id, fragmentID);
 	glDeleteShader(vertexID);
 	glDeleteShader(fragmentID);
 }
@@ -67,14 +69,13 @@ void Shader::compile(std::uint32_t id, std::string name)
 
 const char* Shader::readContent(const char* path)
 {
-	const char* result = "";
-	std::ifstream fileReader(path);
+	std::string result = "";
+	std::fstream fileReader(path);
 	if (fileReader.is_open())
 	{
 		std::stringstream stream;
 		stream << fileReader.rdbuf();
-		std::string string = stream.str();
-		result = string.c_str();
+		result = stream.str();
 	}
 	else
 	{
@@ -82,5 +83,10 @@ const char* Shader::readContent(const char* path)
 		exit(0);
 	}
 
-	return result;
+	return result.c_str();
+}
+
+void Shader::uniformMat4(const char* name, glm::mat4x4 m)
+{
+	glUniformMatrix4fv(glGetUniformLocation(m_id, name), 1, false, glm::value_ptr(m));
 }

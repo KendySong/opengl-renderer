@@ -21,11 +21,14 @@ int main()
 	glfwInit();
 	GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL Renderer", NULL, NULL);
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_VERSION_MINOR, 5);
+	glfwWindowHint(GLFW_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwMakeContextCurrent(window);
 
 	gladLoadGLLoader(GLADloadproc(glfwGetProcAddress));
+	std::cout << "[INFO] " << glGetString(GL_VERSION) << '\n';
+	std::cout << "[INFO] " << glGetString(GL_VENDOR) << '\n';
+
 	glViewport(0, 0, width, height);
 	glClearColor(0, 0, 0, 0);
 
@@ -37,7 +40,7 @@ int main()
 	shader.bind();
 #endif
 
-	Mesh triangle(MeshType::Triangle, 0.5);
+	Mesh triangle(MeshType::Rect, 0.5, &shader);
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();

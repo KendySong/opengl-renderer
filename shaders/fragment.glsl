@@ -1,4 +1,4 @@
-#version 450
+#version 460
 in vec3 g_color;
 
 out vec4 o_pixelColor;
