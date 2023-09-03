@@ -10,6 +10,7 @@
 class Shader
 {
 public:
+	Shader() = default;
 	Shader(Shader&) = delete;
 	Shader(const char* vertexPath, const char* fragmentPath);
 	void bind() const noexcept;
