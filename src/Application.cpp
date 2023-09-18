@@ -75,9 +75,9 @@ int Application::run()
 		sandbox.render();
 
 		ImGui::Begin("Info");
-		ImGui::Text("FPS : %i", infoFps);
-		ImGui::Text("Version : %s", versionName.c_str());
-		ImGui::Text("GPU : %s", gpuName.c_str());
+			ImGui::Text("FPS : %i", infoFps);
+			ImGui::Text("Version : %s", versionName.c_str());
+			ImGui::Text("GPU : %s", gpuName.c_str());
 		ImGui::End();
 
 		ImGui::Render();

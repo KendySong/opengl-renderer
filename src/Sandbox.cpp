@@ -19,8 +19,8 @@ Sandbox::Sandbox()
 	m_shader.bind();
 #endif
 
-	m_meshes.emplace_back(MeshType::Rect, 0.1, &m_shader);
-	m_meshes.emplace_back(MeshType::Triangle, 0.1, &m_shader);
+	//m_meshes.emplace_back(MeshType::Rect, 0.1, &m_shader);
+	//m_meshes.emplace_back(MeshType::Triangle, 0.1, &m_shader);
 }
 
 void Sandbox::update(float deltaTime)
@@ -34,36 +34,57 @@ void Sandbox::render()
 	{
 		m_meshes[i].draw();
 	}
-
+			
 	ImGui::BeginMainMenuBar();
 		if (ImGui::BeginMenu("Meshes"))
 		{
 			if (ImGui::BeginMenu("Add"))
 			{
-				if (ImGui::MenuItem("Triangle"))
+				if (ImGui::BeginMenu("2D"))
 				{
-					m_meshes.emplace_back(MeshType::Triangle, 0.5, &m_shader);
+					if (ImGui::MenuItem("Triangle"))
+					{
+						m_meshes.emplace_back(MeshType::Triangle, 0.1, &m_shader);
+					}
+
+					if (ImGui::MenuItem("Rectangle"))
+					{
+						m_meshes.emplace_back(MeshType::Rect, 0.1, &m_shader);
+					}
+					ImGui::EndMenu();
 				}
 
-				if (ImGui::MenuItem("Rectangle"))
+				if (ImGui::BeginMenu("3D"))
 				{
-					m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
+
+					ImGui::EndMenu();
 				}
+
 				ImGui::EndMenu();
 			}
+		
 			ImGui::EndMenu();
 		}
 	ImGui::EndMainMenuBar();
 
 	ImGui::Begin("Objects");
+		ImGui::Text("Count : %i", m_meshes.size());
 		for (size_t i = 0; i < m_meshes.size(); i++)
 		{
 			ImGui::PushID(i);
 			ImGui::Text("Meshe[%i]", i);
+
 			ImGui::DragFloat3("Position", &m_meshes[i].transform.position.x, 0.01);
 			ImGui::DragFloat3("Rotation", &m_meshes[i].transform.rotation.x, 0.01);
 			ImGui::DragFloat3("Scale", &m_meshes[i].transform.scale.x, 0.01);
 			ImGui::ColorEdit3("Color", &m_meshes[i].color.x);
+
+			if (ImGui::Button("Delete"))
+			{
+				m_meshes[i].del();
+				m_meshes.erase(m_meshes.begin() + i);
+			}
+
 			ImGui::Separator();
 			ImGui::PopID();
 		}

@@ -6,8 +6,6 @@
 
 Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(shader)
 {
-	std::uint32_t vbo;
-	std::uint32_t ebo;
 	std::uint32_t indices[] {
 			0, 1, 3,
 			1, 2, 3
@@ -18,41 +16,37 @@ Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(sha
 	{
 	case MeshType::Triangle :
 		m_vertices = {
-			{ {  0,     size, 0 }, { 0, 1, 0 }, { 0, 0 } },
-			{ { -size, -size, 0 }, { 1, 0, 0 }, { 0, 0 } },
-			{ {  size, -size, 0 }, { 0, 0, 1 }, { 0, 0 } }
+			{ {  0,     size, 0 }, { 0, 0, 0 }, { 0, 0 } },
+			{ { -size, -size, 0 }, { 0, 0, 0 }, { 0, 0 } },
+			{ {  size, -size, 0 }, { 0, 0, 0 }, { 0, 0 } }
 		};
 		
 		glGenVertexArrays(1, &m_vao);
 		glBindVertexArray(m_vao);
 
-		glGenBuffers(1, &vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glGenBuffers(1, &m_vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
-		this->configInput();
-
 		break;
 
 	case MeshType::Rect :
 		m_vertices = {
-			{ { size,   size, 0 }, { 1, 0, 1 }, { 0, 0 } },
-			{ { size,  -size, 0 }, { 0, 1, 0 }, { 0, 0 } },
-			{ { -size, -size, 0 }, { 0, 0, 1 }, { 0, 0 } },
-			{ { -size,  size, 0 }, { 1, 0, 0 }, { 0, 0 } }
+			{ { size,   size, 0 }, { 0, 0, 0 }, { 0, 0 } },
+			{ { size,  -size, 0 }, { 0, 0, 0 }, { 0, 0 } },
+			{ { -size, -size, 0 }, { 0, 0, 0 }, { 0, 0 } },
+			{ { -size,  size, 0 }, { 0, 0, 0 }, { 0, 0 } }
 		};
 	
 		glGenVertexArrays(1, &m_vao);
 		glBindVertexArray(m_vao);
 
-		glGenBuffers(1, &vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glGenBuffers(1, &m_vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
 
-		glGenBuffers(1, &ebo);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+		glGenBuffers(1, &m_ebo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
-
-		this->configInput();
 		break;
 
 	default :
@@ -61,6 +55,8 @@ Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(sha
 #endif
 		break;
 	}
+
+	Vertex::config();
 }
 
 void Mesh::draw()
@@ -88,13 +84,9 @@ void Mesh::draw()
 	}
 }
 
-void Mesh::configInput()
+void Mesh::del()
 {
-	glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), (void*)0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, false, sizeof(Vertex), (void*)(sizeof(glm::vec3)));
-	glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(Vertex), (void*)(2 * sizeof(glm::vec3)));
-
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
+	glDeleteBuffers(1, &m_ebo);
+	glDeleteBuffers(1, &m_vbo);
+	glDeleteVertexArrays(1, &m_vao);
 }
