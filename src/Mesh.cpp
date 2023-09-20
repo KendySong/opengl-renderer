@@ -11,7 +11,7 @@ Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(sha
 			1, 2, 3
 	};
 
-	this->color = glm::vec3(1);
+	this->material.albedo = glm::vec3(1);
 	switch (type)
 	{
 	case MeshType::Triangle :
@@ -70,7 +70,7 @@ void Mesh::draw()
 
 	this->shader->bind();
 	this->shader->uniformMat4("u_world", world);
-	this->shader->uniformVec3("u_color", this->color);
+	this->shader->uniformVec3("u_color", this->material.albedo);
 	glBindVertexArray(m_vao);
 	switch (m_type)
 	{

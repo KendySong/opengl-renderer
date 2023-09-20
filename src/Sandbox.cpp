@@ -67,26 +67,38 @@ void Sandbox::render()
 		}
 	ImGui::EndMainMenuBar();
 
-	ImGui::Begin("Objects");
+	ImGui::Begin("Scene");
 		ImGui::Text("Count : %i", m_meshes.size());
+		ImGui::Separator();
+
 		for (size_t i = 0; i < m_meshes.size(); i++)
 		{
-			ImGui::PushID(i);
-			ImGui::Text("Meshe[%i]", i);
-
-			ImGui::DragFloat3("Position", &m_meshes[i].transform.position.x, 0.01);
-			ImGui::DragFloat3("Rotation", &m_meshes[i].transform.rotation.x, 0.01);
-			ImGui::DragFloat3("Scale", &m_meshes[i].transform.scale.x, 0.01);
-			ImGui::ColorEdit3("Color", &m_meshes[i].color.x);
-
-			if (ImGui::Button("Delete"))
+			char buffer[20];
+			std::sprintf(buffer, "Meshes[%i]", i);		
+			if (ImGui::CollapsingHeader(buffer))
 			{
-				m_meshes[i].del();
-				m_meshes.erase(m_meshes.begin() + i);
-			}
+				ImGui::PushID(i);
 
-			ImGui::Separator();
-			ImGui::PopID();
+				ImGui::TextUnformatted("Transform");
+				ImGui::Separator();
+				ImGui::DragFloat3("Position", &m_meshes[i].transform.position.x, 0.01);
+				ImGui::DragFloat3("Rotation", &m_meshes[i].transform.rotation.x, 0.01);
+				ImGui::DragFloat3("Scale", &m_meshes[i].transform.scale.x, 0.01);
+
+				ImGui::TextUnformatted("Material");
+				ImGui::Separator();
+				ImGui::ColorEdit3("Color", &m_meshes[i].material.albedo.x);
+
+				if (ImGui::Button("Delete"))
+				{
+					m_meshes[i].del();
+					m_meshes.erase(m_meshes.begin() + i);
+				}
+
+				ImGui::Separator();
+				ImGui::PopID();
+			}
+			
 		}
 	ImGui::End();
 }

@@ -7,6 +7,7 @@
 #include "MeshType.hpp"
 #include "Vertex.hpp"
 #include "Shader.hpp"
+#include "Material.hpp"
 
 class Mesh
 {
@@ -16,7 +17,7 @@ public :
 	void draw();
 	void del();
 
-	glm::vec3 color;
+	Material material;
 	Transform transform;
 	Shader* shader;
 
