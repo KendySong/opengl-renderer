@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 
-#include "Config.hpp"
+#include "../Config.hpp"
 #include "Sandbox.hpp"
 
 Sandbox::Sandbox()

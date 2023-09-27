@@ -13,9 +13,11 @@ public:
 	Shader() = default;
 	Shader(Shader&) = delete;
 	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader(const char* computePath);
 	void bind() const noexcept;
 
 private:
+	void checkLink();
 	void compile(std::uint32_t id, std::string name);
 	const char* readContent(const char* path);
 

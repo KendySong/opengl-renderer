@@ -4,13 +4,10 @@
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
-	const char* vertex = "";
-	const char* fragment = "";
+	const char* vertex = this->readContent(vertexPath);
+	const char* fragment = this->readContent(fragmentPath);;
 	std::uint32_t vertexID = glCreateShader(GL_VERTEX_SHADER);
 	std::uint32_t fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
-
-	vertex = this->readContent(vertexPath);
-	fragment = this->readContent(fragmentPath);
 
 	glShaderSource(vertexID, 1, &vertex, NULL);
 	glShaderSource(fragmentID, 1, &fragment, NULL);
@@ -22,18 +19,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	glAttachShader(m_id, vertexID);
 	glAttachShader(m_id, fragmentID);
 	glLinkProgram(m_id);
-
-	int linkStatus = 0;
-	glGetProgramiv(m_id, GL_LINK_STATUS, &linkStatus);
-	if (!linkStatus)
-	{
-		int length = 0;
-		glGetProgramiv(m_id, GL_INFO_LOG_LENGTH, &length);
-
-		std::vector<char> linkStatusMessage(length);
-		glGetProgramInfoLog(m_id, length, nullptr, linkStatusMessage.data());
-		std::cout << "[ERROR] shader linking failed " << linkStatusMessage.data() << '\n';
-	}
+	
+	checkLink(m_id);
 
 	glDetachShader(m_id, vertexID);
 	glDetachShader(m_id, fragmentID);
@@ -41,9 +28,45 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	glDeleteShader(fragmentID);
 }
 
+Shader::Shader(const char* computePath)
+{
+	const char* compute = readContent(computePath);
+	std::uint32_t computeID = glCreateShader(GL_COMPUTE_SHADER);
+
+	glShaderSource(computeID, 1, &compute, NULL);
+	this->compile(computeID, "compute");
+
+	m_id = glCreateProgram();
+	glAttachShader(m_id, computeID);
+	glLinkProgram(m_id);
+
+	checkLink(m_id);
+
+	glDetachShader(m_id, computeID);
+	glDeleteShader(m_id, computeID);
+}
+
 void Shader::bind() const noexcept
 {
 	glUseProgram(m_id);
+}
+
+void Shader::checkLink(std::uint32 programID) 
+{
+	int linkStatus = 0;
+	glGetProgramiv(programID, GL_LINK_STATUS, &linkStatus);
+	if (!linkStatus)
+	{
+		int length = 0;
+		glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &length);
+
+		std::vector<char> linkStatusMessage(length);
+		glGetProgramInfoLog(programID, length, nullptr, linkStatusMessage.data());
+		std::cout << "[ERROR] shader linking failed " << linkStatusMessage.data() << '\n';
+		exit(0);
+	}
+
+	return true;
 }
 
 void Shader::compile(std::uint32_t id, std::string name)
