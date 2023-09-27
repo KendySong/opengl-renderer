@@ -17,7 +17,7 @@ public:
 	void bind() const noexcept;
 
 private:
-	void checkLink();
+	void checkLink(std::uint32_t programID);
 	void compile(std::uint32_t id, std::string name);
 	const char* readContent(const char* path);
 

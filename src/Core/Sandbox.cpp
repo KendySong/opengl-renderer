@@ -1,8 +1,11 @@
+#include <filesystem>
+
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_glfw.h>
 #include <ImGui/imgui_impl_opengl3.h>
 
 #include <glad/glad.h>
+
 
 #include "../Config.hpp"
 #include "Sandbox.hpp"
@@ -19,8 +22,10 @@ Sandbox::Sandbox()
 	m_shader.bind();
 #endif
 
-	//m_meshes.emplace_back(MeshType::Rect, 0.1, &m_shader);
-	//m_meshes.emplace_back(MeshType::Triangle, 0.1, &m_shader);
+	std::cout << std::filesystem::current_path();
+
+	m_meshes.emplace_back(MeshType::Rect, 0.1, &m_shader);
+	m_meshes.emplace_back(MeshType::Triangle, 0.1, &m_shader);
 }
 
 void Sandbox::update(float deltaTime)

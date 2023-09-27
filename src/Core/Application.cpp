@@ -8,7 +8,7 @@
 #include <glfw/glfw3.h>
 
 #include "Sandbox.hpp"
-#include "Config.hpp"
+#include "../Config.hpp"
 #include "Timer.hpp"
 #include "Application.hpp"
 

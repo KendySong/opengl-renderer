@@ -31,10 +31,10 @@ Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(sha
 
 	case MeshType::Rect :
 		m_vertices = {
-			{ { size,   size, 0 }, { 0, 0, 0 }, { 0, 0 } },
-			{ { size,  -size, 0 }, { 0, 0, 0 }, { 0, 0 } },
+			{ { size,   size, 0 }, { 0, 0, 0 }, { 1, 1 } },
+			{ { size,  -size, 0 }, { 0, 0, 0 }, { 1, 0 } },
 			{ { -size, -size, 0 }, { 0, 0, 0 }, { 0, 0 } },
-			{ { -size,  size, 0 }, { 0, 0, 0 }, { 0, 0 } }
+			{ { -size,  size, 0 }, { 0, 0, 0 }, { 0, 1 } }
 		};
 	
 		glGenVertexArrays(1, &m_vao);

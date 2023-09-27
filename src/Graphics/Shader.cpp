@@ -43,7 +43,7 @@ Shader::Shader(const char* computePath)
 	checkLink(m_id);
 
 	glDetachShader(m_id, computeID);
-	glDeleteShader(m_id, computeID);
+	glDeleteShader(computeID);
 }
 
 void Shader::bind() const noexcept
@@ -51,7 +51,7 @@ void Shader::bind() const noexcept
 	glUseProgram(m_id);
 }
 
-void Shader::checkLink(std::uint32 programID) 
+void Shader::checkLink(std::uint32_t programID) 
 {
 	int linkStatus = 0;
 	glGetProgramiv(programID, GL_LINK_STATUS, &linkStatus);
@@ -63,10 +63,7 @@ void Shader::checkLink(std::uint32 programID)
 		std::vector<char> linkStatusMessage(length);
 		glGetProgramInfoLog(programID, length, nullptr, linkStatusMessage.data());
 		std::cout << "[ERROR] shader linking failed " << linkStatusMessage.data() << '\n';
-		exit(0);
 	}
-
-	return true;
 }
 
 void Shader::compile(std::uint32_t id, std::string name)
@@ -86,7 +83,6 @@ void Shader::compile(std::uint32_t id, std::string name)
 		glGetShaderInfoLog(id, length, nullptr, messageError.data());
 
 		std::cout << messageError.data() << '\n';
-		exit(0);
 	}
 }
 
@@ -103,7 +99,6 @@ const char* Shader::readContent(const char* path)
 	else
 	{
 		std::cout << "[ERROR] shader at : " << path << " not found\n";
-		exit(0);
 	}
 
 	return result.c_str();

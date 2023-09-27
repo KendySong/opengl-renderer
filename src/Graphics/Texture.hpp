@@ -6,7 +6,6 @@ class Texture
 public :
     Texture();
     Texture(const char* imgPath);
-    Texture(&Texture) = delete;
 
     void bind() noexcept;
 
