@@ -7,8 +7,8 @@
 Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(shader)
 {
 	std::uint32_t indices[] {
-			0, 1, 3,
-			1, 2, 3
+		0, 1, 3,
+		1, 2, 3
 	};
 
 	this->material.albedo = glm::vec3(1);
@@ -72,6 +72,8 @@ void Mesh::draw()
 	this->shader->uniformMat4("u_world", world);
 	this->shader->uniformVec3("u_color", this->material.albedo);
 	glBindVertexArray(m_vao);
+	this->texture.bind();
+
 	switch (m_type)
 	{
 	case MeshType::Triangle :
@@ -84,7 +86,7 @@ void Mesh::draw()
 	}
 }
 
-void Mesh::del()
+void Mesh::remove()
 {
 	glDeleteBuffers(1, &m_ebo);
 	glDeleteBuffers(1, &m_vbo);

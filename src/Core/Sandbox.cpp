@@ -1,13 +1,11 @@
-#include <filesystem>
-
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_glfw.h>
 #include <ImGui/imgui_impl_opengl3.h>
 
 #include <glad/glad.h>
 
-
 #include "../Config.hpp"
+#include "../Graphics/Texture.hpp"
 #include "Sandbox.hpp"
 
 Sandbox::Sandbox()
@@ -19,13 +17,16 @@ Sandbox::Sandbox()
 	m_shader = Shader("../shaders/vertex.glsl", "../shaders/fragment.glsl");
 #else
 	m_shader = Shader("vertex.glsl", "fragment.glsl");
-	m_shader.bind();
 #endif
 
-	std::cout << std::filesystem::current_path();
+	Texture wall = Texture("../textures/wall.jpg");
+	Texture container = Texture("../textures/container.jpg");
 
-	m_meshes.emplace_back(MeshType::Rect, 0.1, &m_shader);
-	m_meshes.emplace_back(MeshType::Triangle, 0.1, &m_shader);
+	m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
+	m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
+
+	m_meshes[0].texture = wall;
+	m_meshes[1].texture = container;
 }
 
 void Sandbox::update(float deltaTime)
@@ -61,7 +62,6 @@ void Sandbox::render()
 
 				if (ImGui::BeginMenu("3D"))
 				{
-
 					ImGui::EndMenu();
 				}
 
@@ -96,14 +96,13 @@ void Sandbox::render()
 
 				if (ImGui::Button("Delete"))
 				{
-					m_meshes[i].del();
+					m_meshes[i].remove();
 					m_meshes.erase(m_meshes.begin() + i);
 				}
 
 				ImGui::Separator();
 				ImGui::PopID();
-			}
-			
+			}		
 		}
 	ImGui::End();
 }

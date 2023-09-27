@@ -4,7 +4,7 @@
 class Texture
 {
 public :
-    Texture();
+    Texture() = default;
     Texture(const char* imgPath);
 
     void bind() noexcept;

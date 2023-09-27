@@ -14,6 +14,7 @@ public:
 	Shader(Shader&) = delete;
 	Shader(const char* vertexPath, const char* fragmentPath);
 	Shader(const char* computePath);
+
 	void bind() const noexcept;
 
 private:

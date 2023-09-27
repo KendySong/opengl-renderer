@@ -6,9 +6,11 @@ layout (location = 2) in vec2 uv;
 uniform mat4x4 u_world;
 
 out vec3 g_color;
+out vec2 g_uv;
 
 void main()
 {
 	gl_Position = u_world * vec4(position, 1);
 	g_color = color;
+	g_uv = uv;
 }

@@ -8,6 +8,7 @@
 #include "Vertex.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
+#include "Texture.hpp"
 
 class Mesh
 {
@@ -15,8 +16,9 @@ public :
 	Mesh() = default;
 	Mesh(MeshType type, float size, Shader* shader);
 	void draw();
-	void del();
+	void remove();
 
+	Texture texture;
 	Material material;
 	Transform transform;
 	Shader* shader;
