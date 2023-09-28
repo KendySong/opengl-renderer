@@ -91,6 +91,12 @@ void Sandbox::render()
 				ImGui::TextUnformatted("Material");
 				ImGui::Separator();
 				ImGui::ColorEdit3("Color", &m_meshes[i].material.albedo.x);
+				
+				int renderType = static_cast<int>(m_meshes[i].renderType);
+				ImGui::InputInt("Render Type", &renderType);
+				m_meshes[i].renderType = static_cast<RenderType>(renderType);
+				
+				ImGui::Separator();
 
 				if (ImGui::Button("Delete"))
 				{
@@ -98,17 +104,6 @@ void Sandbox::render()
 					m_meshes.erase(m_meshes.begin() + i);
 				}
 
-				if (ImGui::Button("Set texture"))
-				{
-					m_meshes[i].texture =  std::shared_ptr<Texture>(new Texture("textures/container.jpg"));
-					m_meshes[i].renderType = RenderType::Texture;
-				}
-
-				int renderType = static_cast<int>(m_meshes[i].renderType);
-				ImGui::InputInt("Render Type", &renderType);
-				m_meshes[i].renderType = static_cast<RenderType>(renderType);
-				
-				ImGui::Separator();
 				ImGui::PopID();
 			}		
 		}
