@@ -24,7 +24,7 @@ int Application::run()
 	Timer fpsClock;
 	Timer deltaClock;
 	std::uint32_t fps = 0;
-	std::uint32_t infoFps = 0;
+	this->infoFps = 0;
 
 	glfwInit();
 	GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL Renderer", NULL, NULL);
@@ -38,25 +38,6 @@ int Application::run()
 	ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
-	
-	std::string gpuName = "";
-	std::string versionName = "";
-	auto version = glGetString(GL_VERSION);
-	auto gpu = glGetString(GL_RENDERER);
-	for (size_t i = 0; i < strlen((char*)gpu); i++)
-		gpuName += gpu[i];
-	for (size_t i = 0; i < strlen((char*)version); i++)
-		versionName += version[i];
-	
-	std::cout << "[INFO] " << version << '\n';
-	std::cout << "[INFO] " << gpu << '\n';
-
-	const char* mode = "Mode : Default";
-#ifdef DEBUG
-	mode = "Mode : Debug";
-#elif RELEASE
-	mode = "Mode : Release";
-#endif
 
 	Sandbox sandbox;
 	while (!glfwWindowShouldClose(window))
@@ -81,13 +62,6 @@ int Application::run()
 
 		sandbox.render();
 
-		ImGui::Begin("Info");
-			ImGui::Text("FPS : %i", infoFps);
-			ImGui::TextUnformatted(mode);
-			ImGui::Text("Version : %s", versionName.c_str());
-			ImGui::Text("GPU : %s", gpuName.c_str());
-		ImGui::End();
-
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
@@ -97,6 +71,7 @@ int Application::run()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	glfwDestroyWindow(window);
+
 	return 0;
 }
 
