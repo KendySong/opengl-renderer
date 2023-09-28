@@ -21,7 +21,9 @@ void main()
             break;
 
         case 2 :
-            //custom
+            vec2 resolution = vec2(1600, 900);
+            vec2 nCoord = gl_FragCoord.xy / resolution;
+            o_pixelColor = vec4(sin(100 * (u_color.y / nCoord.x)), 0, cos(100 * (u_color.y / nCoord.y)), 1);
             break;
     }	
 }
