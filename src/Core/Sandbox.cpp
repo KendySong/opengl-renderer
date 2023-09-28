@@ -9,6 +9,7 @@
 #include "../Config.hpp"
 #include "../Graphics/Texture.hpp"
 #include "Sandbox.hpp"
+#include "Gui.hpp"
 
 Sandbox::Sandbox()
 {
@@ -20,11 +21,13 @@ Sandbox::Sandbox()
 #else
 	m_shader = Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 #endif
-	m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
-	m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
 
-	m_meshes[0].texture = std::shared_ptr<Texture>(new Texture("textures/wall.jpg"));
-	m_meshes[0].renderType = RenderType::Texture;
+	for (size_t i = 0; i < 1; i++)
+	{
+		m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
+		m_meshes[i].texture = std::shared_ptr<Texture>(new Texture("textures/wall.jpg"));
+		m_meshes[i].renderType = RenderType::Texture;
+	}
 }
 
 void Sandbox::update(float deltaTime)
@@ -91,11 +94,26 @@ void Sandbox::render()
 				ImGui::TextUnformatted("Material");
 				ImGui::Separator();
 				ImGui::ColorEdit3("Color", &m_meshes[i].material.albedo.x);
-				
-				int renderType = static_cast<int>(m_meshes[i].renderType);
-				ImGui::InputInt("Render Type", &renderType);
-				m_meshes[i].renderType = static_cast<RenderType>(renderType);
-				
+
+				if (ImGui::BeginCombo("Render Type", Gui::RenderTypeStr(m_meshes[i].renderType)))
+				{
+					for (int j = static_cast<int>(RenderType::Color); j <= static_cast<int>(RenderType::Shader); j++)
+					{
+						RenderType current = static_cast<RenderType>(j);
+						bool selected = m_meshes[i].renderType == current;
+						if (ImGui::Selectable(Gui::RenderTypeStr(current), selected))
+						{
+							m_meshes[i].renderType = current;
+						}
+						
+						if (selected) 
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+					}	
+					ImGui::EndCombo();		
+				}
+	
 				ImGui::Separator();
 
 				if (ImGui::Button("Delete"))
