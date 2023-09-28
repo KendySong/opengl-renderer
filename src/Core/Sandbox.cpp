@@ -5,6 +5,7 @@
 #include <ImGui/imgui_impl_opengl3.h>
 
 #include <glad/glad.h>
+#include <glm/gtc/random.hpp>
 
 #include "../Config.hpp"
 #include "../Graphics/Texture.hpp"
@@ -25,6 +26,7 @@ Sandbox::Sandbox()
 	for (size_t i = 0; i < 1; i++)
 	{
 		m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
+
 		m_meshes[i].texture = std::shared_ptr<Texture>(new Texture("textures/wall.jpg"));
 		m_meshes[i].renderType = RenderType::Texture;
 	}
