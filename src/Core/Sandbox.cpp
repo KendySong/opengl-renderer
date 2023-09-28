@@ -25,7 +25,8 @@ Sandbox::Sandbox()
 
 	for (size_t i = 0; i < 1; i++)
 	{
-		m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
+		m_meshes.emplace_back(MeshType::Rect, 0.1, &m_shader);
+        m_meshes[i].transform.position = glm::vec3(glm::diskRand(1.0f), 0);
 
 		m_meshes[i].texture = std::shared_ptr<Texture>(new Texture("textures/wall.jpg"));
 		m_meshes[i].renderType = RenderType::Texture;
