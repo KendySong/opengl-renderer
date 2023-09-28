@@ -16,11 +16,11 @@ Sandbox::Sandbox()
 #if DEBUG
 	m_shader = Shader("../shaders/vertex.glsl", "../shaders/fragment.glsl");
 #else
-	m_shader = Shader("vertex.glsl", "fragment.glsl");
+	m_shader = Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 #endif
 
-	Texture wall = Texture("../textures/wall.jpg");
-	Texture container = Texture("../textures/container.jpg");
+	Texture wall = Texture("textures/wall.jpg");
+	Texture container = Texture("textures/container.jpg");
 
 	m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
 	m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);

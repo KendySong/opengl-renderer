@@ -3,13 +3,14 @@
 #include "Shader.hpp"
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
-{
-	const char* vertex = this->readContent(vertexPath);
-	const char* fragment = this->readContent(fragmentPath);;
+{	
 	std::uint32_t vertexID = glCreateShader(GL_VERTEX_SHADER);
 	std::uint32_t fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
 
+	const char* vertex = this->readContent(vertexPath);
 	glShaderSource(vertexID, 1, &vertex, NULL);
+
+	const char* fragment = this->readContent(fragmentPath);
 	glShaderSource(fragmentID, 1, &fragment, NULL);
 
 	this->compile(vertexID, "vertex");
@@ -95,6 +96,9 @@ const char* Shader::readContent(const char* path)
 		std::stringstream stream;
 		stream << fileReader.rdbuf();
 		result = stream.str();
+
+		fileReader.close();
+		//std::cout << path << std::endl << result << std::endl; 
 	}
 	else
 	{

@@ -51,6 +51,13 @@ int Application::run()
 	std::cout << "[INFO] " << version << '\n';
 	std::cout << "[INFO] " << gpu << '\n';
 
+	const char* mode = "Mode : Default";
+#ifdef DEBUG
+	mode = "Mode : Debug";
+#elif RELEASE
+	mode = "Mode : Release";
+#endif
+
 	Sandbox sandbox;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -76,6 +83,7 @@ int Application::run()
 
 		ImGui::Begin("Info");
 			ImGui::Text("FPS : %i", infoFps);
+			ImGui::TextUnformatted(mode);
 			ImGui::Text("Version : %s", versionName.c_str());
 			ImGui::Text("GPU : %s", gpuName.c_str());
 		ImGui::End();
