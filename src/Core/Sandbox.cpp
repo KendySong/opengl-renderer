@@ -1,3 +1,5 @@
+#include <memory>
+
 #include <ImGui/imgui.h>
 #include <ImGui/imgui_impl_glfw.h>
 #include <ImGui/imgui_impl_opengl3.h>
@@ -18,15 +20,11 @@ Sandbox::Sandbox()
 #else
 	m_shader = Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 #endif
-
-	Texture wall = Texture("textures/wall.jpg");
-	Texture container = Texture("textures/container.jpg");
-
 	m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
 	m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
 
-	m_meshes[0].texture = wall;
-	m_meshes[1].texture = container;
+	m_meshes[0].texture = std::shared_ptr<Texture>(new Texture("textures/wall.jpg"));
+	m_meshes[0].renderType = RenderType::Texture;
 }
 
 void Sandbox::update(float deltaTime)
@@ -100,6 +98,16 @@ void Sandbox::render()
 					m_meshes.erase(m_meshes.begin() + i);
 				}
 
+				if (ImGui::Button("Set texture"))
+				{
+					m_meshes[i].texture =  std::shared_ptr<Texture>(new Texture("textures/container.jpg"));
+					m_meshes[i].renderType = RenderType::Texture;
+				}
+
+				int renderType = static_cast<int>(m_meshes[i].renderType);
+				ImGui::InputInt("Render Type", &renderType);
+				m_meshes[i].renderType = static_cast<RenderType>(renderType);
+				
 				ImGui::Separator();
 				ImGui::PopID();
 			}		

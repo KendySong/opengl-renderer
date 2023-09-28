@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
+#include <memory>
 
 #include <glad/glad.h>
 
+#include "RenderType.hpp"
 #include "Transform.hpp"
 #include "MeshType.hpp"
 #include "Vertex.hpp"
@@ -18,10 +20,11 @@ public :
 	void draw();
 	void remove();
 
-	Texture texture;
-	Material material;
-	Transform transform;
 	Shader* shader;
+	Transform transform;
+	Material material;
+	RenderType renderType;
+	std::shared_ptr<Texture> texture;
 
 private :
 	MeshType m_type;

@@ -1,11 +1,10 @@
-#if DEBUG
-	#include <iostream>
-#endif
+#include <iostream>
 
 #include "Mesh.hpp"
 
 Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(shader)
 {
+	this->renderType = RenderType::Color;
 	std::uint32_t indices[] {
 		0, 1, 3,
 		1, 2, 3
@@ -50,9 +49,7 @@ Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(sha
 		break;
 
 	default :
-#if DEBUG
 		std::cout << "[ERROR] mesh type unkndown : " << static_cast<int>(type) << '\n';
-#endif
 		break;
 	}
 
@@ -69,10 +66,19 @@ void Mesh::draw()
 	world = glm::scale(world, this->transform.scale);
 
 	this->shader->bind();
+	if (texture.get() != nullptr)
+	{
+		this->texture->bind();		
+	}
+	else
+	{
+		this->renderType = RenderType::Color;
+	}
+
 	this->shader->uniformMat4("u_world", world);
 	this->shader->uniformVec3("u_color", this->material.albedo);
+	this->shader->uniformI("u_type", static_cast<int>(renderType));
 	glBindVertexArray(m_vao);
-	this->texture.bind();
 
 	switch (m_type)
 	{
