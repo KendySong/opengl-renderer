@@ -108,17 +108,22 @@ const char* Shader::readContent(const char* path)
 	return result.c_str();
 }
 
-void Shader::uniformMat4(const char* name, glm::mat4x4& m)
+void Shader::uniformMat4(const char* name, const glm::mat4x4& m)
 {
 	glUniformMatrix4fv(glGetUniformLocation(m_id, name), 1, false, glm::value_ptr(m));
 }
 
-void Shader::uniformVec3(const char* name, glm::vec3& v)
+void Shader::uniformVec3(const char* name, const glm::vec3& v)
 {
 	glUniform3fv(glGetUniformLocation(m_id, name), 1, glm::value_ptr(v));
 }
 
-void Shader::uniformI(const char* name, int v)
+void Shader::uniformVec2(const char* name, const glm::vec2& v)
+{
+	glUniform2fv(glGetUniformLocation(m_id, name), 1, glm::value_ptr(v));
+}
+
+void Shader::uniformI(const char* name, const int v)
 {
 	glUniform1i(glGetUniformLocation(m_id, name), v);
 }

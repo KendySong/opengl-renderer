@@ -2,6 +2,7 @@
 in vec3 g_color;
 in vec2 g_uv;
 
+uniform vec2 u_resolution;
 uniform vec3 u_color;
 uniform int u_type;
 uniform sampler2D u_texture;
@@ -21,9 +22,8 @@ void main()
             break;
 
         case 2 :
-            vec2 resolution = vec2(1600, 900);
-            vec2 nCoord = gl_FragCoord.xy / resolution;
-            o_pixelColor = vec4(sin(100 * (u_color.y / nCoord.x)), 0, cos(100 * (u_color.y / nCoord.y)), 1);
+            vec2 nCoord = gl_FragCoord.xy / u_resolution;
+            o_pixelColor = vec4(sin(100 * (u_color.y / nCoord.x)), abs(cos(sin(nCoord.x/nCoord.y))), cos(100 * (u_color.y / nCoord.y)), 1);
             break;
     }	
 }

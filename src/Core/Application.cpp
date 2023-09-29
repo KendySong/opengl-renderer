@@ -8,7 +8,7 @@
 #include <glfw/glfw3.h>
 
 #include "Sandbox.hpp"
-#include "../Config.hpp"
+#include "../Settings.hpp"
 #include "Timer.hpp"
 #include "Application.hpp"
 
@@ -27,7 +27,7 @@ int Application::run()
 	this->infoFps = 0;
 
 	glfwInit();
-	GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL Renderer", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(Settings::instance().width, Settings::instance().height, "OpenGL Renderer", NULL, NULL);
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
