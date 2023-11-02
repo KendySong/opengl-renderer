@@ -44,6 +44,28 @@ void Gui::settings(int fps)
 		ImGui::TextUnformatted(m_mode);
 		ImGui::TextUnformatted(vn);
 		ImGui::TextUnformatted(gn);
+
+		ImGui::TextUnformatted("Render");
+		ImGui::Separator();
+		if (ImGui::BeginCombo("Render Mode", Gui::RenderModeStr(Settings::instance.renderMode)))
+		{
+			for (size_t i = static_cast<int>(RenderMode::Point); i <= static_cast<int>(RenderMode::Fill); i++)
+			{
+				auto current = static_cast<RenderMode>(i);
+				bool selected = Settings::instance.renderMode == current;
+				if (ImGui::Selectable(Gui::RenderModeStr(current), selected))
+				{
+					Settings::instance.renderMode = current;
+				}
+
+				if (selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+		ImGui::Separator();
 	ImGui::End();
 }
 
@@ -71,27 +93,30 @@ void Gui::scene(std::vector<Mesh>& meshes)
 				ImGui::Separator();
 				ImGui::ColorEdit3("Color", &meshes[i].material.albedo.x);
 
-				if (ImGui::BeginCombo("Render Type", Gui::RenderTypeStr(meshes[i].renderType)))
+				if (meshes[i].type != MeshType::Line)
 				{
-					for (int j = static_cast<int>(RenderType::Color); j <= static_cast<int>(RenderType::Shader); j++)
+					if (ImGui::BeginCombo("Render Type", Gui::RenderTypeStr(meshes[i].renderType)))
 					{
-						RenderType current = static_cast<RenderType>(j);
-						bool selected = meshes[i].renderType == current;
-						if (ImGui::Selectable(Gui::RenderTypeStr(current), selected))
+						for (int j = static_cast<int>(RenderType::Color); j <= static_cast<int>(RenderType::Shader); j++)
 						{
-							meshes[i].renderType = current;
+							RenderType current = static_cast<RenderType>(j);
+							bool selected = meshes[i].renderType == current;
+							if (ImGui::Selectable(Gui::RenderTypeStr(current), selected))
+							{
+								meshes[i].renderType = current;
+							}
+
+							if (selected)
+							{
+								ImGui::SetItemDefaultFocus();
+							}
 						}
-						
-						if (selected) 
-						{
-							ImGui::SetItemDefaultFocus();
-						}
-					}	
-					ImGui::EndCombo();		
+						ImGui::EndCombo();
+					}
 				}
+				
 	
 				ImGui::Separator();
-
 				if (ImGui::Button("Delete"))
 				{
 					meshes[i].remove();
@@ -154,4 +179,22 @@ const char* Gui::RenderTypeStr(RenderType type)
         default :
             return "Unknown";
     }
+}
+
+const char* Gui::RenderModeStr(RenderMode mode)
+{
+	switch (mode)
+	{
+	case RenderMode::Fill:
+		return "Fill";
+
+	case RenderMode::Wireframe:
+		return "Wireframe";
+
+	case RenderMode::Point:
+		return "Point";
+
+	default:
+		return "Unknown";
+	}
 }

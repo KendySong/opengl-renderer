@@ -15,7 +15,7 @@
 
 Sandbox::Sandbox()
 {
-	Settings& settings = Settings::instance();
+	Settings& settings = Settings::instance;
 	glViewport(0, 0, settings.width,settings.height);
 	glClearColor(0, 0, 0, 0);
 
@@ -27,15 +27,7 @@ Sandbox::Sandbox()
 
 	m_shader.bind();
 	m_shader.uniformVec2("u_resolution", settings.resolution);
-	
-	for (size_t i = 0; i < 1; i++)
-	{
-		m_meshes.emplace_back(MeshType::Rect, 0.5, &m_shader);
-        m_meshes[i].transform.position = glm::vec3(glm::diskRand(1.0f), 0);
-
-		m_meshes[i].texture = std::shared_ptr<Texture>(new Texture("textures/wall.jpg"));
-		m_meshes[i].renderType = RenderType::Texture;
-	}
+	m_meshes.emplace_back(MeshType::Line, 0.5, &m_shader, glm::vec3(0.5, -0.5, 0), glm::vec3(0, 0, 0));
 }
 
 void Sandbox::update(float deltaTime)

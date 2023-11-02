@@ -27,7 +27,7 @@ int Application::run()
 	this->infoFps = 0;
 
 	glfwInit();
-	GLFWwindow* window = glfwCreateWindow(Settings::instance().width, Settings::instance().height, "OpenGL Renderer", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(Settings::instance.width, Settings::instance.height, "OpenGL Renderer", NULL, NULL);
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -55,6 +55,7 @@ int Application::run()
 			fpsClock.restart();
 		}
 
+		glPolygonMode(GL_FRONT_AND_BACK, static_cast<GLenum>(Settings::instance.renderMode));
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();

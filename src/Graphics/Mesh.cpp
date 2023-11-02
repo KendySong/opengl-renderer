@@ -2,7 +2,7 @@
 
 #include "Mesh.hpp"
 
-Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(shader)
+Mesh::Mesh(MeshType type, float size, Shader* shader, glm::vec3 a, glm::vec3 b) : type(type), shader(shader)
 {
 	this->renderType = RenderType::Color;
 	std::uint32_t indices[] {
@@ -48,6 +48,21 @@ Mesh::Mesh(MeshType type, float size, Shader* shader) : m_type(type), shader(sha
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
 		break;
 
+	case MeshType::Line :
+		m_vertices = {
+			{ { a.x, a.y, 0 }, { 0, 0, 0 }, { 0, 0 } },
+			{ { b.x, b.y, 0 }, { 0, 0, 0 }, { 0, 0 } },
+		};
+
+		glGenVertexArrays(1, &m_vao);
+		glBindVertexArray(m_vao);
+
+		glGenBuffers(1, &m_vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
+
+		break;
+
 	default :
 		std::cout << "[ERROR] mesh type unkndown : " << static_cast<int>(type) << '\n';
 		break;
@@ -80,7 +95,7 @@ void Mesh::draw()
 	this->shader->uniformI("u_type", static_cast<int>(renderType));
 	glBindVertexArray(m_vao);
 
-	switch (m_type)
+	switch (type)
 	{
 	case MeshType::Triangle :
 		glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -88,6 +103,11 @@ void Mesh::draw()
 
 	case MeshType::Rect :
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		break;
+
+	case MeshType::Line :
+		this->shader->uniformI("u_type", static_cast<int>(RenderType::Color));
+		glDrawArrays(GL_LINES, 0, 2);
 		break;
 	}
 }
